@@ -8,7 +8,12 @@ config.window_background_opacity = 0.85
 config.macos_window_background_blur = 20
 config.window_decorations = "RESIZE"
 config.hide_tab_bar_if_only_one_tab = true
-
+  config.window_padding = {
+    left = 2,
+    right = 2,
+    top = 2,
+    bottom = 6,
+  }
  config.window_frame = {
    inactive_titlebar_bg = "none",
    active_titlebar_bg = "none",
@@ -66,24 +71,24 @@ config.keys = {
     action = act.SplitVertical { domain = "CurrentPaneDomain" },
   },
 
-  -- ペイン移動: Ctrl+a → h/j/k/l
+  -- ペイン移動: Ctrl+矢印
   {
-    key = "h",
+    key = "LeftArrow",
     mods = "CTRL",
     action = act.ActivatePaneDirection "Left",
   },
   {
-    key = "j",
+    key = "DownArrow",
     mods = "CTRL",
     action = act.ActivatePaneDirection "Down",
   },
   {
-    key = "k",
+    key = "UpArrow",
     mods = "CTRL",
     action = act.ActivatePaneDirection "Up",
   },
   {
-    key = "l",
+    key = "RightArrow",
     mods = "CTRL",
     action = act.ActivatePaneDirection "Right",
   },
