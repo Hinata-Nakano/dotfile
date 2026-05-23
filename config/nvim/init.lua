@@ -259,3 +259,11 @@ vim.g.mapleader = " "  -- ← これ大事（Spaceをleaderにする）
 vim.keymap.set("n", "<leader>g", ":LazyGit<CR>")
 --clipboadにコピペする。yyでOSにコピーしてpでペースト
 vim.opt.clipboard = "unnamedplus"
+
+-- 行末の一文字先にもカーソルを置けるようにする
+vim.opt.virtualedit = "onemore"
+
+-- Ctrl-z を一般的なエディタの undo として使う
+vim.keymap.set("n", "<C-z>", "u", { silent = true })
+vim.keymap.set("i", "<C-z>", "<C-o>u", { silent = true })
+vim.keymap.set("v", "<C-z>", "<Esc>u", { silent = true })
