@@ -4,6 +4,18 @@ vim.opt.rtp:prepend(lazypath)
 
 -- プラグイン設定
 require("lazy").setup({
+  -- カラーテーマ
+  {
+    "rebelot/kanagawa.nvim",
+    priority = 1000,
+    config = function()
+      require("kanagawa").setup({
+        theme = "wave",
+      })
+      vim.cmd.colorscheme("kanagawa-wave")
+    end,
+  },
+
   -- ファイルツリー
   {
     "nvim-neo-tree/neo-tree.nvim",
