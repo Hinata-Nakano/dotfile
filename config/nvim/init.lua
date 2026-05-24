@@ -257,6 +257,7 @@ vim.keymap.set("n", "<C-n>", ":Neotree toggle<CR>")
 vim.keymap.set("n", "<C-p>", ":Telescope find_files<CR>")
 vim.g.mapleader = " "  -- ← これ大事（Spaceをleaderにする）
 vim.keymap.set("n", "<leader>g", ":LazyGit<CR>")
+vim.keymap.set("i", "jj", "<Esc>", { silent = true, desc = "Exit insert mode" })
 --clipboadにコピペする。yyでOSにコピーしてpでペースト
 vim.opt.clipboard = "unnamedplus"
 
