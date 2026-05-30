@@ -25,3 +25,7 @@ codexdev() {
 
 # ===== 端末ごとに異なる設定は以下のファイルに記述する =====
 [ -f ~/.zsh_local ] && source ~/.zsh_local
+
+# JDK 21 and Kotlin
+export JAVA_HOME="$HOME/.local/opt/jdk-21"
+export PATH="$HOME/.local/bin:$HOME/.local/opt/kotlinc/bin:$JAVA_HOME/bin:$PATH"
