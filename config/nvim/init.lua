@@ -119,7 +119,7 @@ cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
 -- LSP
 require("mason").setup()
 require("mason-lspconfig").setup({
-  ensure_installed = { "gopls" },
+  ensure_installed = { "gopls", "kotlin_language_server" },
 })
 
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
@@ -186,6 +186,11 @@ vim.lsp.config("gopls", {
 })
 vim.lsp.enable("gopls")
 
+vim.lsp.config("kotlin_language_server", {
+  capabilities = capabilities,
+})
+vim.lsp.enable("kotlin_language_server")
+
 vim.api.nvim_create_autocmd("LspAttach", {
   callback = function(args)
     local opts = { buffer = args.buf, silent = true }
@@ -223,6 +228,13 @@ vim.api.nvim_set_hl(0, "@lsp.type.function.go", { fg = "#e6c384" })
 vim.api.nvim_set_hl(0, "@lsp.type.method.go", { fg = "#e6c384" })
 vim.api.nvim_set_hl(0, "@lsp.type.type.go", { fg = "#7aa89f", bold = true })
 
+vim.api.nvim_set_hl(0, "@lsp.type.variable.kotlin", { fg = "#dcd7ba" })
+vim.api.nvim_set_hl(0, "@lsp.type.parameter.kotlin", { fg = "#957fb8", italic = true })
+vim.api.nvim_set_hl(0, "@lsp.type.property.kotlin", { fg = "#7e9cd8" })
+vim.api.nvim_set_hl(0, "@lsp.type.function.kotlin", { fg = "#e6c384" })
+vim.api.nvim_set_hl(0, "@lsp.type.method.kotlin", { fg = "#e6c384" })
+vim.api.nvim_set_hl(0, "@lsp.type.type.kotlin", { fg = "#7aa89f", bold = true })
+
 vim.diagnostic.config({
   virtual_text = true,
   signs = true,
@@ -233,7 +245,7 @@ vim.diagnostic.config({
 
 -- 構文ハイライト
 require("nvim-treesitter.configs").setup({
-  ensure_installed = { "go", "gomod", "gosum", "gowork", "lua" },
+  ensure_installed = { "go", "gomod", "gosum", "gowork", "kotlin", "lua" },
   highlight = {
     enable = true,
   },
