@@ -119,7 +119,10 @@ for _, language in ipairs({ "go", "kotlin" }) do
 end
 
 vim.diagnostic.config({
-  virtual_text = true,
+  virtual_text = false,
+  virtual_lines = {
+    current_line = true,
+  },
   signs = true,
   underline = true,
   update_in_insert = false,
