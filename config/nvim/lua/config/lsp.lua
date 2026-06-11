@@ -1,6 +1,12 @@
 require("mason").setup()
 require("mason-lspconfig").setup({
-  ensure_installed = { "gopls", "kotlin_language_server" },
+  ensure_installed = { "gopls", "kotlin_language_server", "yamlls" },
+})
+require("mason-tool-installer").setup({
+  ensure_installed = {
+    "detekt",
+    "ktlint",
+  },
 })
 
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
@@ -70,8 +76,20 @@ vim.lsp.enable("gopls")
 
 vim.lsp.config("kotlin_language_server", {
   capabilities = capabilities,
+  root_markers = { "settings.gradle", "settings.gradle.kts", "pom.xml", ".git" },
 })
 vim.lsp.enable("kotlin_language_server")
+
+vim.lsp.config("yamlls", {
+  capabilities = capabilities,
+  root_markers = { "settings.gradle", "settings.gradle.kts", "pom.xml", ".git" },
+  settings = {
+    yaml = {
+      keyOrdering = false,
+    },
+  },
+})
+vim.lsp.enable("yamlls")
 
 vim.api.nvim_create_autocmd("LspAttach", {
   callback = function(args)
@@ -85,7 +103,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
     vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
 
     local client = vim.lsp.get_client_by_id(args.data.client_id)
-    if client and client:supports_method("textDocument/documentHighlight") then
+    if client and client.name ~= "kotlin_language_server" and client:supports_method("textDocument/documentHighlight") then
       local group = vim.api.nvim_create_augroup("lsp_document_highlight", { clear = false })
 
       vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
@@ -116,6 +134,21 @@ for _, language in ipairs({ "go", "kotlin" }) do
   for token_type, highlight in pairs(semantic_highlights) do
     vim.api.nvim_set_hl(0, "@lsp.type." .. token_type .. "." .. language, highlight)
   end
+end
+
+local publish_diagnostics = vim.lsp.handlers["textDocument/publishDiagnostics"]
+vim.lsp.handlers["textDocument/publishDiagnostics"] = function(err, result, ctx, config)
+  local client = vim.lsp.get_client_by_id(ctx.client_id)
+  if client and client.name == "kotlin_language_server" and result and result.diagnostics then
+    result.diagnostics = vim.tbl_filter(function(diagnostic)
+      local code = diagnostic.code
+      local message = diagnostic.message or ""
+      return code ~= "INCOMPATIBLE_CLASS"
+        and code ~= "INLINE_FROM_HIGHER_PLATFORM"
+        and not (code == "UNRESOLVED_REFERENCE" and message:find("SpringBootApplication", 1, true))
+    end, result.diagnostics)
+  end
+  return publish_diagnostics(err, result, ctx, config)
 end
 
 vim.diagnostic.config({

@@ -7,6 +7,8 @@ vim.g.mapleader = " "
 require("config.plugins")
 require("config.cmp")
 require("config.lsp")
+require("config.format")
+require("config.lint")
 require("config.treesitter")
 require("config.neo-tree")
 require("config.keymaps")
