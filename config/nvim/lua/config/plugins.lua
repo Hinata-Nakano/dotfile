@@ -10,6 +10,37 @@ require("lazy").setup({
       vim.cmd.colorscheme("kanagawa-wave")
     end,
   },
+  {
+    "nvim-lualine/lualine.nvim",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    opts = {
+      options = {
+        theme = "kanagawa",
+        globalstatus = true,
+        section_separators = "",
+        component_separators = "|",
+      },
+      sections = {
+        lualine_a = { "mode" },
+        lualine_b = { "branch", "diff" },
+        lualine_c = { { "filename", path = 1 } },
+        lualine_x = { "diagnostics", "filetype" },
+        lualine_y = { "progress" },
+        lualine_z = { "location" },
+      },
+    },
+  },
+  {
+    "folke/which-key.nvim",
+    event = "VeryLazy",
+    opts = {
+      preset = "modern",
+      spec = {
+        { "<leader>g", group = "Git" },
+        { "<leader>h", group = "Git hunks" },
+      },
+    },
+  },
 
   -- ファイルツリー
   {
@@ -41,6 +72,11 @@ require("lazy").setup({
     dependencies = {
       "nvim-lua/plenary.nvim",
     },
+    init = function()
+      vim.g.lazygit_floating_window_scaling_factor = 0.95
+      vim.g.lazygit_floating_window_winblend = 0
+      vim.g.lazygit_use_neovim_remote = 1
+    end,
   },
   {
     "lewis6991/gitsigns.nvim",
@@ -48,6 +84,29 @@ require("lazy").setup({
     config = function()
       require("config.git").setup_gitsigns()
     end,
+  },
+  {
+    "isakbm/gitgraph.nvim",
+    dependencies = { "sindrets/diffview.nvim" },
+    opts = {
+      git_cmd = "git",
+      symbols = {
+        merge_commit = "M",
+        commit = "*",
+      },
+      format = {
+        timestamp = "%Y-%m-%d %H:%M",
+        fields = { "hash", "timestamp", "author", "branch_name", "tag" },
+      },
+      hooks = {
+        on_select_commit = function(commit)
+          vim.cmd("DiffviewOpen " .. commit.hash .. "^!")
+        end,
+        on_select_range_commit = function(from, to)
+          vim.cmd("DiffviewOpen " .. from.hash .. "~1.." .. to.hash)
+        end,
+      },
+    },
   },
   {
     "sindrets/diffview.nvim",
