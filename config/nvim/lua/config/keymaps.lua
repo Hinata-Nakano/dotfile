@@ -1,10 +1,38 @@
 local map = vim.keymap.set
 
-map("n", "<C-n>", "<cmd>Neotree toggle<CR>", { desc = "Toggle file tree" })
+local function close_diffview()
+  local ok, lib = pcall(require, "diffview.lib")
+  if ok and lib.get_current_view() then
+    vim.cmd("DiffviewClose")
+  end
+end
+
+local function close_neotree()
+  if vim.fn.exists(":Neotree") == 2 then
+    vim.cmd("Neotree close")
+  end
+end
+
+local function is_diffview_open()
+  local ok, lib = pcall(require, "diffview.lib")
+  return ok and lib.get_current_view() ~= nil
+end
+
+map("n", "<C-n>", function()
+  close_diffview()
+  vim.cmd("Neotree toggle")
+end, { desc = "Toggle file tree" })
 map("n", "<C-p>", "<cmd>Telescope find_files<CR>", { desc = "Find files" })
 
 -- Git views
-map("n", "<leader>gg", "<cmd>LazyGit<CR>", { desc = "Git UI (LazyGit)" })
+map("n", "<leader>gg", function()
+  close_neotree()
+  if is_diffview_open() then
+    vim.cmd("DiffviewClose")
+  else
+    vim.cmd("DiffviewOpen")
+  end
+end, { desc = "Toggle Git source control" })
 map("n", "<leader>gd", "<cmd>DiffviewOpen<CR>", { desc = "Git diff view" })
 map("n", "<leader>gD", "<cmd>DiffviewClose<CR>", { desc = "Close Git diff view" })
 map("n", "<leader>gh", "<cmd>DiffviewFileHistory %<CR>", { desc = "Current file history" })

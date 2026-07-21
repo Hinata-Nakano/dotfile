@@ -69,6 +69,14 @@ require("lazy").setup({
         default = { layout = "diff2_horizontal" },
         merge_tool = { layout = "diff3_mixed" },
       },
+      file_panel = {
+        -- Use the file panel as the VSCode-like Source Control sidebar.
+        listing_style = "list",
+        win_config = {
+          position = "left",
+          width = 35,
+        },
+      },
     },
   },
   {
