@@ -43,7 +43,7 @@ wezterm-layout() {
   wezterm cli split-pane \
     --pane-id "$nvim_pane" \
     --bottom \
-    --percent 35 \
+    --percent 25 \
     --cwd "$cwd" \
     -- zsh -l
 
@@ -52,7 +52,7 @@ wezterm-layout() {
     --pane-id "$nvim_pane" \
     --right \
     --top-level \
-    --percent 38 \
+    --percent 30 \
     --cwd "$cwd" \
     -- zsh -l
 }
