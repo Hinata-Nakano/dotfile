@@ -1,6 +1,35 @@
 local wezterm = require 'wezterm'
 local config = wezterm.config_builder()
 
+local mux = wezterm.mux
+local layout_requested = os.getenv("WEZTERM_LAYOUT") == "1"
+
+if layout_requested then
+  wezterm.on("gui-startup", function(cmd)
+    local cwd = (cmd and cmd.cwd) or wezterm.home_dir
+    local tab, pane, window = mux.spawn_window {
+      cwd = cwd,
+      args = { "nvim" },
+    }
+
+    -- 左下：ターミナル25%
+    pane:split {
+      direction = "Bottom",
+      size = 0.25,
+      cwd = cwd,
+      args = { "zsh", "-l" },
+    }
+
+    -- 右側：チャット用ペイン30%
+    pane:split {
+      direction = "Right",
+      top_level = true,
+      size = 0.30,
+      cwd = cwd,
+      args = { "zsh", "-l" },
+    }
+  end)
+end
 config.automatically_reload_config = true
 config.font_size = 16.0
 config.use_ime = true
