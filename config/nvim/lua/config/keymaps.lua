@@ -18,7 +18,7 @@ local function is_diffview_open()
   return ok and lib.get_current_view() ~= nil
 end
 
-map("n", "<C-n>", function()
+map("n", "<C-e>", function()
   close_diffview()
   vim.cmd("Neotree toggle")
 end, { desc = "Toggle file tree" })
